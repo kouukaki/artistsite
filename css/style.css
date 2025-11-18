@@ -1,0 +1,484 @@
+:root{
+  --bg-dark:#0a0a0a;
+  --text:#eaeaea;
+  --muted:rgba(234,234,234,.6);
+  --accent:#fff;
+}
+
+/* ================= Base & Layout (Sticky Footer) ================= */
+*{ box-sizing:border-box; }
+
+html, body{
+  height:100%;
+  min-height:100svh;
+}
+
+body{
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  color:var(--text);
+  background:var(--bg-dark);
+  line-height:1.6;
+  letter-spacing:.02em;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding-top:72px; /* fixed header 占位 */
+  display: flex;                /* 启用 flex 布局 */
+  justify-content: center;      /* 水平居中（可选，看你是否要整个内容水平居中） */
+  
+}
+
+
+
+/* 平滑滚动与锚点偏移 */
+html{ scroll-behavior:smooth; }
+#profile{ scroll-margin-top:90px; }
+
+/* ================= Header / Nav ================= */
+.site-header{
+  position:fixed; inset:0 0 auto 0; z-index:20;
+  height:72px;
+  display:flex; align-items:center;
+  backdrop-filter:saturate(140%) blur(6px);
+  background:rgba(0,0,0,.25);
+}
+
+.nav{
+  width:100%;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px;
+  padding:0 clamp(16px, 2.4vw, 32px);
+}
+
+.brand{
+  display:flex; align-items:center; gap:10px;
+  margin-right:auto; text-decoration:none; color:var(--accent);
+}
+.brand img{
+  height:80px; width:auto; display:block; background:transparent;
+  image-rendering:-webkit-optimize-contrast;
+  transform:translateY(2px);
+}
+
+/* 与 HTML 对齐：.nav-list */
+.nav-list{
+  list-style:none; display:flex; gap:26px; margin:0; padding:0;
+}
+.nav-list a{
+  position:relative;
+  color:var(--muted); text-decoration:none; font-size:.9rem; letter-spacing:.08em;
+}
+.nav-list a:hover{ color:var(--text); }
+.nav-list a::after{
+  content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+  background: var(--accent); transition: width .25s ease;
+}
+.nav-list a:hover::after, .nav-list a:focus-visible::after{ width:100%; }
+
+/* ================= 可选 Hero（未用可删） ================= */
+.hero{
+  position:relative; min-height:100vh; width:100%;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  background:#000 url("../images/01.jpg") center / cover no-repeat;
+}
+.overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.85) 100%); }
+.hero-inner{ position:relative; z-index:1; width:min(1200px,92%); display:grid; place-items:center; text-align:center; }
+.wordmark{ display:flex; align-items:center; justify-content:center; gap:16px; }
+.wordmark img{ width:160px; height:auto; display:block; }
+.tag{ margin-top:1px; font-size:2rem; font-weight:600; letter-spacing:.25em; color:var(--muted); }
+
+/* ================= Profile Section（背景图+遮罩） ================= */
+.mf-profile{
+  position:relative;
+  flex:1;
+  padding: clamp(48px, 8svh, 96px) 0 clamp(28px, 6svh, 64px);
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 12% 10%, rgba(255,255,255,.04), transparent 60%),
+    radial-gradient(800px 400px at 80% 22%, rgba(255,255,255,.03), transparent 60%),
+    linear-gradient(transparent 98%, rgba(255,255,255,.04) 100%),
+    url("../images/01.jpg") center / cover no-repeat,
+    var(--bg-dark);
+}
+.mf-profile::before{
+  content:""; position:absolute; inset:0;
+  background:rgba(0,0,0,.35);  /* 调整遮罩强度以优化对比 */
+  pointer-events:none;
+}
+
+.mf-profile__inner{
+  position:relative; z-index:1; /* 在遮罩之上 */
+  width:min(1200px, 92%);
+  margin-inline:auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+  display:grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(24px, 4vw, 64px);
+  align-items:start;
+}
+@media (max-width: 900px){
+  .mf-profile__inner{ grid-template-columns: 1fr; }
+}
+
+.mf-profile__text{ max-width: 60ch;  max-width: 60ch;
+  margin-top: 60px;   /* 👈 整个文字块往下移 40px */ 
+}
+.mf-profile__label{ margin:0 0 10px; font-size:.85rem; letter-spacing:.16em; color: var(--muted); }
+.mf-profile__title{
+  margin:0 0 18px; font-weight:700;
+  font-size: clamp(1.9rem, 3vw + .75rem, 3.1rem);
+  line-height:1.25; color: var(--text);
+}
+.mf-profile__para{
+  margin:0 0 14px;
+  font-size: clamp(1rem, .65vw + .8rem, 1.1rem);
+  line-height:1.95; color: var(--text);
+}
+.mf-profile__para:last-child{ margin-bottom:0; }
+
+/* 拼贴图（右侧） */
+/* 容器尺寸更稳定，给绝对定位一个可靠参照 */
+/* 容器保持相对定位即可 */
+/* 确保容器是叠放参照 */
+.mf-profile__media{
+  position: relative !important;
+  min-height: clamp(360px, 42svh, 480px);
+}
+
+/* 主图：右上角锚定 */
+.mf-profile__img--main{
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: auto;
+  width: clamp(320px, 32vw, 420px);
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  transform: none;
+  z-index: 1;
+  animation: mf-fadeIn .5s ease both;
+}
+.mf-profile__img--main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* 保持比例填满容器 */
+  object-position: center;  /* 👈 始终显示图像中心 */
+  display: block;
+}
+
+
+/* 叠放图：用负 bottom 让它覆盖到主图右下角 */
+.mf-profile__img--overlay{
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: auto;
+  width: clamp(320px, 32vw, 420px);
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  transform: none;
+  z-index: 1;
+  animation: mf-fadeIn .5s ease both;
+
+
+}
+
+.mf-profile__img--overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* 保持比例填满容器 */
+  object-position: center;  /* 👈 始终显示图像中心 */
+  display: block;
+}
+
+/* 只淡入，不位移 */
+@keyframes mf-fadeIn{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+
+
+/* ================= Footer (compact) ================= */
+.site-footer{
+  background: rgba(0,0,0,.85);
+  margin-top:0;
+  padding: 14px 0 20px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  text-align:center;
+  color: var(--muted);
+}
+.footer-inner{
+  width:min(1200px,92%); margin-inline:auto;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+.footer-logo img{
+  width:56px; height:auto;
+  filter: brightness(1.1) contrast(1.1);
+  transition: opacity .3s ease;
+}
+.footer-logo img:hover{ opacity:.8; }
+.social-links{
+  list-style:none; display:flex; gap:14px; padding:0; margin:0;
+}
+.social-links a{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px;
+  transition: transform .25s ease, filter .25s ease;
+}
+.social-links img{
+  width:100%; height:auto; display:block;
+  filter: brightness(.9) contrast(1.1);
+  transition: filter .25s ease;
+}
+.social-links a:hover{ transform: scale(1.08); }
+.social-links a:hover img{ filter: brightness(1.2) contrast(1.2); }
+.copyright{
+  font-size:.72rem; letter-spacing:.04em; color:var(--muted);
+}
+
+/* ========== Discography ========== */
+.article-discography{
+  width:min(1200px, 92%);
+  margin: 0 auto;
+  padding: clamp(72px,10vw,120px) 0;
+  color: var(--text);
+}
+
+.section-discography{
+  margin-bottom: clamp(28px, 6vw, 56px);
+}
+
+.section-discography h1{
+  margin: 0 0 12px;
+  font-size: clamp(1.8rem, 1.2rem + 2vw, 2.6rem);
+  letter-spacing:.06em;
+  font-weight:700;
+}
+
+.section-discography h2{
+  margin: 0 0 16px;
+  font-size: clamp(1.2rem, 0.9rem + 1vw, 1.6rem);
+  color: var(--muted);
+  font-weight:600;
+  letter-spacing:.12em;
+}
+
+/* 每张专辑一张“卡片” */
+.item-discography{
+  display:grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
+  gap: clamp(18px, 2.4vw, 32px);
+  align-items:start;
+
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 18px 48px rgba(0,0,0,.35);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+@media (max-width: 860px){
+  .item-discography{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 左侧封面与信息 */
+.item-left{
+  display:flex; gap:16px; align-items:flex-start;
+}
+.item-left img{
+  width: clamp(160px, 26vw, 220px);
+  height: auto;
+  border-radius: 16px;
+  display:block;
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+  object-fit: cover;
+}
+.item-left p{
+  margin: 6px 0 0;
+  line-height:1.7;
+  color: var(--muted);
+}
+
+/* 右侧曲目列表 */
+.item-right ul{
+  margin:0; padding:0; list-style:none;
+  border-radius: 14px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.06);
+  overflow: hidden;
+}
+
+.item-right li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 16px;
+
+  padding: 12px 14px;
+  font-size: clamp(.95rem, .85rem + .2vw, 1rem);
+  line-height:1.6;
+  color: var(--text);
+  font-variant-numeric: tabular-nums; /* 时间列对齐更稳 */
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.item-right li:last-child{ border-bottom:none; }
+
+/* hover 高亮 */
+.item-right li:hover{
+  background: rgba(255,255,255,.06);
+}
+
+/* 如果你喜欢把时长“靠右列”更明显，可把时间包进 span.time，然后启用以下两行——
+   目前不会破坏你现有 HTML（无 .time 时不会生效） */
+.item-right li .time{ margin-left:auto; color: var(--muted); }
+.item-right li .time::before{ content:""; }
+
+/* 小屏时让列表更紧凑一些 */
+@media (max-width: 520px){
+  .item-right li{ padding: 10px 12px; }
+}
+
+/* 让整块唱片页有全宽背景图 */
+.article-discography{
+  position: relative;
+  isolation: isolate; /* 建立独立层叠上下文，避免影响外层 */
+}
+
+/* 伪元素做背景：宽度撑到视口，全程在内容下方 */
+.article-discography::before{
+  content:"";
+  position: absolute;
+  /* 这行的 trick：把左右各扩到视口边缘，获得“全宽背景” */
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+
+  /* 背景图 + 遮罩（人物在右侧，所以水平对齐向右偏）*/
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.60)),
+    url("../images/08.jpg") 70% center / cover no-repeat;
+  /* 可选：大屏做视差效果 */
+  /* background-attachment: fixed; */
+}
+
+/* ===== Schedule ===== */
+#schedule{ scroll-margin-top: 90px; }
+
+.mf-schedule{
+  position: relative;
+  isolation: isolate;         /* 建立独立层叠上下文 */
+  z-index: 0;
+  padding: clamp(64px, 10svh, 110px) 0;
+  color: var(--text);
+
+  /* 定义背景图变量（注意双杠） */
+  --schedule-bg: url("../images/09.jpg");
+}
+
+.mf-schedule::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.55)),
+    var(--schedule-bg, none) 60% center / cover no-repeat;
+  /* 可选：桌面端加轻微视差 */
+  /* background-attachment: fixed; */
+}
+
+
+.mf-schedule__inner{
+  width:min(1100px, 92%);
+  margin-inline:auto;
+}
+
+.mf-schedule h2{
+  margin:0 0 6px;
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.2rem);
+  letter-spacing:.06em; font-weight:700;
+}
+.mf-schedule__hint{ margin:0 0 22px; color: var(--muted); }
+
+/* 列表卡片 */
+.gig-list{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-direction:column; gap:12px;
+}
+.gig{
+  display:grid;
+  grid-template-columns: minmax(220px, 260px) 1fr auto;
+  align-items:center; gap:20px;
+
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius:12px;
+  padding:14px 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* 左列：日期 */
+.col-date .date-main{ font-weight:700; display:block; }
+.col-date .date-sub{
+  margin-top:4px; font-size:.9rem; color:var(--muted);
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.col-date .dj{ font-weight:700; }
+
+/* 中列：场地信息 */
+.venue{ font-weight:600; }
+.city{ color:var(--muted); margin-top:2px; }
+.joined{ color:var(--muted); font-size:.95rem; margin-top:2px; }
+
+/* 徽标与状态 */
+.badge{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:22px; padding:0 10px; border-radius:999px;
+  font-size:.78rem; font-weight:700; letter-spacing:.02em;
+  background:#e6e6e6; color:#222;
+}
+.badge.late{ background:#d8d1ff; color:#2b2460; }
+.badge.new { background:#e9ecef; color:#333; }
+
+.status{
+  justify-self:end;
+  height:38px; padding:0 16px;
+  border-radius:10px;
+  border:2px solid #ddd; background:transparent;
+  color:#ddd; font-weight:700; letter-spacing:.02em;
+  cursor:default;
+}
+.status[disabled]{ opacity:.7; }
+
+/* Hover（桌面） */
+@media (hover:hover){
+  .gig:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+}
+
+/* 小屏：单列堆叠 */
+@media (max-width: 760px){
+  .gig{ grid-template-columns: 1fr; gap:10px; }
+  .status{ justify-self:start; }
+}
+
+
